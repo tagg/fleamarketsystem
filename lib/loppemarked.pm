@@ -74,8 +74,9 @@ post '/hjaelper' => sub {
           (params->{$period_id.'scouts'} eq '' || params->{$period_id.'scouts'} eq '0')) {
         push @{$period}, 'Hvis ingen deltager, så fjern fluebenet.';
         $error = 1;
+      } else {
+        push @{$period}, '';
       }
-      push @{$period}, '';
       push @{$period}, params->{'team'.$period_id.'check'};
       push @{$period}, params->{$period_id.'adults'};
       push @{$period}, params->{$period_id.'scouts'};
@@ -87,7 +88,11 @@ post '/hjaelper' => sub {
   }
 
   if ($error || !$branch_selected) {
-    $content->{message} = 'Der er fejl i tilmeldingen.';
+    if ($branch_selected) {
+      $content->{error} = 'Der er fejl i tilmeldingen.';
+    } else {
+      $content->{error} = 'Du burde nok v&aelig;lge en periode at deltage i, ellers behøver du ikke tilmelde dig.';
+    }
     $content->{firstname} = params->{firstname};
     $content->{lastname} = params->{lastname};
     $content->{branch_id} = params->{branch_id};
