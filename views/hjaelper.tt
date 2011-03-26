@@ -1,13 +1,15 @@
 <div class="frame">
   <div class="message">
     <p>
-      [% message %]
+      <span class="accepted">
+        [% message %]
+      </span>
       <span class="error">
         [% error %]
       </span>
     </p>
   </div>
-<h2>Tilmelding som hj&aelig;lper til loppemarkedet</h2>
+<h2><center>Tilmelding som hj&aelig;lper til loppemarkedet</center></h2>
 <form name="input" action="/hjaelper" method="post">
   <div class="user">
     <table>

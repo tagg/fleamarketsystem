@@ -29,6 +29,10 @@ a:hover {
   text-decoration: none;
 }
 
+span.accepted {
+  color: green;
+}
+
 span.error {
   color: red;
 }
