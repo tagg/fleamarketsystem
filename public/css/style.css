@@ -34,11 +34,11 @@ span.error {
 }
 
 input.names {
-  width: 150px;
+  width: 180px;
 }
 
 div.user {
-  width: 464px;
+  width: 492px;
   padding:3px;
   margin:0px;
   margin-bottom:10px;
@@ -47,7 +47,7 @@ div.user {
 }
 
 div.team_header {
-  width: 464px;
+  width: 492px;
   padding:3px;
   margin:0px;
   background: #e5eecc;
@@ -56,7 +56,7 @@ div.team_header {
 }
 
 div.team {
-  width: 450px;
+  width: 478px;
   padding: 10px;
   margin: 0px;
   background: #e5eecc;

@@ -11,7 +11,7 @@
 <form name="input" action="/hjaelper" method="post">
   <div class="user">
     <table>
-      <tr><td width="78">Fornavn:</td><td width="170"><input class="names" type="text" name="firstname" value="[% firstname %]"/>*</td><td><span class="error">[% firstnameerror %]</span></td></tr>
+      <tr><td width="78">Fornavn:</td><td><input class="names" type="text" name="firstname" value="[% firstname %]"/>*</td><td><span class="error">[% firstnameerror %]</span></td></tr>
       <tr><td>Efternavn:</td><td><input class="names" type="text" name="lastname" value="[% lastname %]"/>*</td><td><span class="error">[% lastnameerror %]</span></td></tr>
       <tr><td>Gren:</td><td><select name="branch_id">
       [% FOREACH branch IN branches %]
