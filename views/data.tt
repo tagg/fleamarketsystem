@@ -1,1 +1,27 @@
 [% data %]
+
+<div class="period">
+  [% FOREACH period IN data %]
+    [% period.name %]<br>
+    [% FOREACH assign IN period.data %]
+      [% assign.name %]<br> 
+    [% END %]
+    
+    Ialt: [% period.result.adults %]<br><br>
+  [% END %]
+</div>
+
+<div class="cake">
+  <h3>Følgende personer kommer med kage:</h3>
+  [% FOREACH name IN cake.names %]
+    <span class="name">
+      [% name %]
+    </span>
+  [% END %]
+  <br>
+  <span class="result">
+    Kager ialt: [% cake.amount %]   
+  </span>
+</div>
+
+

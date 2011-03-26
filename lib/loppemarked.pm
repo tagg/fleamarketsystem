@@ -147,45 +147,62 @@ post '/hjaelper' => sub {
 
 get '/data' => sub {
   my $dbh = DBI->connect("dbi:SQLite:dbname=$FindBin::Bin/../data/$databasename","","");
-  my $data = '';
+  my $data;
+  my $cake;
 
-  my ($periods) = $dbh->selectrow_array("SELECT count(*) FROM period");
+  my $periods = $dbh->selectall_arrayref("SELECT period_id,name,cars 
+                                          FROM period");
 
-  for (my $i = 1; $i <= $periods; $i++) {
-    data(\$data,"<br>Periode $i<br>");
-    my @result_array = @{$dbh->selectall_arrayref("SELECT user.firstname,user.lastname,adults,scouts,car,trailer,pull FROM user INNER JOIN team ON user.user_id=team.user_id WHERE period_id = $i")};
+  foreach my $period (@{$periods}) {
+    my $period_id = @{$period}[0];
+    my %period_data;
+    $period_data{period_id} = $period_id;
+    $period_data{name} = @{$period}[1];
+    $period_data{cars} = @{$period}[2];
+    $period_data{result} = {adults => 0, scouts => 0, car => 0, trailer => 0, pull => 0};
+    my @result_array = @{$dbh->selectall_arrayref("SELECT user.firstname,user.lastname,adults,scouts,car,trailer,pull 
+                                                   FROM user 
+                                                     INNER JOIN team 
+                                                     ON user.user_id=team.user_id 
+                                                   WHERE period_id = ?",
+                                                   undef, $period_id)};
     foreach my $result (@result_array) {
       my @array = @{$result};
-      data(\$data,$array[0]." ".$array[1]." kommer ".$array[2]." voksne og ".$array[3]." spejdere. ");
-      data(\$data,"Han har bil. ") if $array[4];
-      data(\$data,"Han har trailer. ") if $array[5];
-      data(\$data,"Han har bil med traek. ") if $array[6];
-      data(\$data,"<br>");
+      push @{$period_data{data}}, {name    => $array[0]." ".$array[1], 
+                                   adults  => $array[2], 
+                                   scouts  => $array[3], 
+                                   car     => $array[4], 
+                                   trailer => $array[5], 
+                                   pull    => $array[6],
+                                  };
+      $period_data{result}{adults}  += $array[2];
+      $period_data{result}{scouts}  += $array[3];
+      $period_data{result}{car}     += $array[4];
+      $period_data{result}{trailer} += $array[5];
+      $period_data{result}{pull}    += $array[6];
+
     }
+    push @{$data}, \%period_data;
   }
   
-  data(\$data,"<br><br>");
-
-  my @brings_cake = @{$dbh->selectcol_arrayref("SELECT user.firstname FROM user INNER JOIN cake ON user.user_id=cake.user_id")};
+  $cake->{amount} = 0;
+  my @brings_cake = @{$dbh->selectcol_arrayref("SELECT user.firstname 
+                                                FROM user 
+                                                  INNER JOIN cake 
+                                                  ON user.user_id=cake.user_id"
+                                              )};
   foreach my $person (@brings_cake) {
-    data(\$data,$person." kommer med kage.<br>");
+    push @{$cake->{names}}, $person;
+    $cake->{amount}++;
   }
 
-  data(\$data,"<br><br>");
-
-  template 'data', {data => $data};
+  #template 'data', {data => Dumper($data), cake => $cake};
+  template 'data', {data => $data, cake => $cake};
 };
 
 any qr{.*} => sub {
   status 'not_found';
   template 'special_404', { path => request->path };
 };
-
-
-sub data {
-  my ($string,$add) = @_;
-  $$string = $$string.$add; 
-  return;
-}
 
 1;
