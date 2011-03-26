@@ -29,7 +29,10 @@ post '/afhentning' => sub {
 
 
 get '/hjaelper' => sub {
-  my $dbh = DBI->connect("dbi:SQLite:dbname=$FindBin::Bin/../data/$databasename","","");
+  my $dbargs = {AutoCommit => 0,
+                PrintError => 1};
+
+  my $dbh = DBI->connect("dbi:SQLite:dbname=$FindBin::Bin/../data/$databasename","","",$dbargs);
   my $message;
   
   my $branches = $dbh->selectall_arrayref("SELECT branch_id,name 
@@ -43,7 +46,10 @@ get '/hjaelper' => sub {
 };
 
 post '/hjaelper' => sub {
-  my $dbh = DBI->connect("dbi:SQLite:dbname=$FindBin::Bin/../data/$databasename","","");
+  my $dbargs = {AutoCommit => 0,
+                PrintError => 1};
+
+  my $dbh = DBI->connect("dbi:SQLite:dbname=$FindBin::Bin/../data/$databasename","","",$dbargs);
   my $content;
 
   my ($firstname, $lastname, $branch, $cake) = (params->{firstname},params->{lastname},params->{branch_id},params->{cake});
@@ -101,39 +107,41 @@ post '/hjaelper' => sub {
   } else {
     $content->{message} = "Tilmeldingen er modtaget.";
 
-   
+    
+    my ($user_id) = $dbh->selectrow_array("SELECT max(user_id)+1
+                                           FROM user;");
 
 #   INSERTING DATA IF GOOD
-#    $dbh->do("INSERT INTO user (firstname,lastname,branch_id) 
-#              VALUES (?, ?, ?)",
-#              undef,params->{firstname},params->{lastname},params->{branch_id});
+    $dbh->do("INSERT INTO user (user_id,firstname,lastname,branch_id) 
+              VALUES (?, ?, ?, ?)",
+              undef,$user_id,params->{firstname},params->{lastname},params->{branch_id});
 
-    my ($user_id) = $dbh->selectrow_array("SELECT user_id 
-                                           FROM user 
-                                           WHERE firstname = ? and lastname = ? and branch_id = ?;"
-                                           ,undef,params->{firstname},params->{lastname},params->{branch_id});
     if (defined params->{cake}) {
-#      $dbh->do("INSERT INTO cake (user_id) 
-#                VALUES (?)",
-#                undef,$user_id);
+      $dbh->do("INSERT INTO cake (user_id) 
+                VALUES (?)",
+                undef,$user_id);
     }
   
-    if (defined params->{team1check}) {
-      my ($period_id,$adults,$scouts,$car,$trailer,$pull);
-      $period_id = 1;
-      $adults = params->{adults};
-      $scouts = params->{scouts};
-      $car = 1 if defined params->{car};
-      $trailer = 1 if defined params->{trailer};
-      $pull = 1 if defined params->{pull};
+    foreach my $period (@{$periods}) {
+      my $period_id = @{$period}[0];
+      if (defined params->{'team'.$period_id.'check'}) {
+        my ($adults,$scouts,$car,$trailer,$pull) = (0,0,0,0,0);
+        $adults = params->{$period_id.'adults'} if (params->{$period_id.'adults'} ne '');
+        $scouts = params->{$period_id.'scouts'} if (params->{$period_id.'scouts'} ne '');
+        $car = 1 if defined params->{$period_id.'car'};
+        $trailer = 1 if defined params->{$period_id.'trailer'};
+        $pull = 1 if defined params->{$period_id.'pull'};
   
-#      $dbh->do("INSERT INTO team (user_id,period_id,adults,scouts,car,trailer,pull)
-#                VALUES (?, ?, ?, ?, ?, ?, ?);",undef,$user_id,$period_id,$adults,$scouts,$car,$trailer,$pull);
+        $dbh->do("INSERT INTO team (user_id,period_id,adults,scouts,car,trailer,pull)
+                  VALUES (?, ?, ?, ?, ?, ?, ?);",
+                  undef,$user_id,$period_id,$adults,$scouts,$car,$trailer,$pull);
+        pop @{$period} foreach (1..7);
+      }
     }
+    $dbh->commit;
   }
    
 # REPLYING TO SUBMITTER
-
   template 'hjaelper', $content;
 };
 

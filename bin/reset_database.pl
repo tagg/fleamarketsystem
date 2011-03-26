@@ -50,7 +50,7 @@ $dbh->do("CREATE TABLE period(
 $dbh->do("CREATE TABLE team(
             user_id INTEGER,
             period_id INTEGER,
-            adults INTEGER DEFAULT 0,
+            adults INTEGER DEFAULT '0',
             scouts INTEGER DEFAULT 0,
             car INTEGER DEFAULT 0,
             trailer INTEGER DEFAULT 0,
