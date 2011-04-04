@@ -20,11 +20,11 @@ get '/' => sub {
 };
 
 get '/afhentning' => sub {
-  template 'data', { data => 'Hello get' };
+  template 'clean', { data => 'Hello get' };
 };
 
 post '/afhentning' => sub {
-  template 'data', { data => 'Hello post' };
+  template 'clean', { data => 'Hello post' };
 };
 
 
