@@ -160,7 +160,7 @@ get '/data' => sub {
     $period_data{name} = @{$period}[1];
     $period_data{cars} = @{$period}[2];
     $period_data{result} = {adults => 0, scouts => 0, car => 0, trailer => 0, pull => 0};
-    my @result_array = @{$dbh->selectall_arrayref("SELECT user.firstname,user.lastname,adults,scouts,car,trailer,pull 
+    my @result_array = @{$dbh->selectall_arrayref("SELECT user.firstname||' '||user.lastname,adults,scouts,car,trailer,pull 
                                                    FROM user 
                                                      INNER JOIN team 
                                                      ON user.user_id=team.user_id 
@@ -168,31 +168,31 @@ get '/data' => sub {
                                                    undef, $period_id)};
     foreach my $result (@result_array) {
       my @array = @{$result};
-      push @{$period_data{data}}, {name    => $array[0]." ".$array[1], 
-                                   adults  => $array[2], 
-                                   scouts  => $array[3], 
-                                   car     => $array[4], 
-                                   trailer => $array[5], 
-                                   pull    => $array[6],
+      push @{$period_data{data}}, {name    => $array[0], 
+                                   adults  => $array[1], 
+                                   scouts  => $array[2], 
+                                   car     => $array[3], 
+                                   trailer => $array[4], 
+                                   pull    => $array[5],
                                   };
-      $period_data{result}{adults}  += $array[2];
-      $period_data{result}{scouts}  += $array[3];
-      $period_data{result}{car}     += $array[4];
-      $period_data{result}{trailer} += $array[5];
-      $period_data{result}{pull}    += $array[6];
+      $period_data{result}{adults}  += $array[1];
+      $period_data{result}{scouts}  += $array[2];
+      $period_data{result}{car}     += $array[3];
+      $period_data{result}{trailer} += $array[4];
+      $period_data{result}{pull}    += $array[5];
 
     }
     push @{$data}, \%period_data;
   }
   
   $cake->{amount} = 0;
-  my @brings_cake = @{$dbh->selectcol_arrayref("SELECT user.firstname 
+  my @brings_cake = @{$dbh->selectcol_arrayref("SELECT user.firstname||' '||user.lastname 
                                                 FROM user 
                                                   INNER JOIN cake 
                                                   ON user.user_id=cake.user_id"
                                               )};
   foreach my $person (@brings_cake) {
-    push @{$cake->{names}}, $person;
+    push @{$cake->{names}},$person;
     $cake->{amount}++;
   }
 

@@ -41,6 +41,11 @@ input.names {
   width: 180px;
 }
 
+div.data {
+  background: #e5eecc;
+  margin:6px;
+}
+
 div.user {
   width: 492px;
   padding:3px;
