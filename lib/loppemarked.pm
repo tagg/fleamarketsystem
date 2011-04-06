@@ -110,6 +110,7 @@ post '/hjaelper' => sub {
     
     my ($user_id) = $dbh->selectrow_array("SELECT max(user_id)+1
                                            FROM user;");
+    $user_id = 0 if !defined $user_id;
 
 #   INSERTING DATA IF GOOD
     $dbh->do("INSERT INTO user (user_id,firstname,lastname,branch_id) 
