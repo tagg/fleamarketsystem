@@ -70,6 +70,7 @@ $dbh->do("CREATE TABLE pickup(
             postalcode TEXT,
             city TEXT,
             description TEXT,
+            pickedup BOOLEAN DEFAULT 0,
             PRIMARY KEY (pickup_id)
           );");
 
