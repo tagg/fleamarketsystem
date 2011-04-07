@@ -7,6 +7,7 @@ use Modern::Perl;
 use Dancer ':syntax';
 use DBI;
 use FindBin;
+use Data::Dump;
 use Data::Dumper;
 use String::CamelCase;
 
@@ -27,13 +28,70 @@ get '/afhentning' => sub {
 
   my $periods = $dbh->selectall_arrayref("SELECT period_id,name FROM period WHERE pickup = 1");
 
-  my $dumper = Dumper $periods;
-
-  template 'afhentning', { data => $dumper, periods => $periods };
+  template 'afhentning', { periods => $periods };
 };
 
 post '/afhentning' => sub {
-  template 'clean', { data => 'Hello post' };
+  my $dbargs = {AutoCommit => 0,
+                PrintError => 1};
+
+  my $dbh = DBI->connect("dbi:SQLite:dbname=$FindBin::Bin/../data/$databasename","","",$dbargs);
+  my $content;
+
+  $content->{periods} = $dbh->selectall_arrayref("SELECT period_id,name FROM period WHERE pickup = 1");
+
+
+# check if input is good
+  my ($name, $phonenumber, $road, $postalcode, $city, $items) = (params->{name},params->{phonenumber},params->{road},params->{postalcode},params->{city},params->{items});
+  my $error = 0;
+
+  if ($name eq '' || $phonenumber eq '' || $road eq '' || $postalcode eq '' || $city eq '' || $items eq '') {
+    $content->{nameerror} = "Navn mangler" if ($name eq '');
+    $content->{phonenumbererror} = "Telefonnummer mangler" if ($phonenumber eq '');
+    $content->{roaderror} = "Vejnavn og nummer mangler" if ($road eq '');
+    $content->{postalcodeerror} = "Postnummer mangler" if ($postalcode eq '');
+    $content->{cityerror} = "By mangler" if ($city eq '');
+    $content->{itemserror} = "Vi vil gerne vide hvad du har til afhentning." if ($items eq '');
+    $error = 1;
+  }
+
+  my $active_periods = 0;
+
+  foreach my $period (@{ $content->{periods} }) {
+    my ($period_id) = @{ $period };
+    $active_periods++ if (params->{"period$period_id"});
+  }
+ 
+  if (!$active_periods) {
+    $error = 1;
+    $content->{perioderror} = "Vi vil gerne vide hvornår vi kan hente tingene";
+  }
+
+  if ($error) {
+    $content->{error} = "Der var en fejl i din registrering.";
+    $content->{name} = params->{name};
+    $content->{phonenumber} = params->{phonenumber};
+    $content->{road} = params->{road};
+    $content->{postalcode} = params->{postalcode};
+    $content->{city} = params->{city};
+    $content->{items} = params->{items};
+
+    foreach my $period (@{ $content->{periods} }) {
+      my ($period_id) = @{ $period };
+      push @{$period}, params->{"period$period_id"};
+    }
+
+  } else {
+    $content->{message} = "Registreringen er modtaget.";
+    #indsæt i databasen
+
+
+
+
+
+  }
+  
+  template 'afhentning', $content;
 };
 
 
@@ -71,6 +129,7 @@ post '/hjaelper' => sub {
                                          );
   $content->{branches} = $branches;
   $content->{periods} = $periods;
+
 # CHECK IF INPUT IS GOOD
 
   my $error = 0;
