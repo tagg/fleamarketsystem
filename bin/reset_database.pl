@@ -43,19 +43,19 @@ $dbh->do("CREATE TABLE cake(
 $dbh->do("CREATE TABLE period(
             period_id INTEGER,
             name TEXT NOT NULL,
-            cars INTEGER DEFAULT 0,
-            pickup INTEGER DEFAULT 0,
+            cars BOOLEAN DEFAULT 0,
+            pickup BOOLEAN DEFAULT 0,
             PRIMARY KEY (period_id)
           );");
 
 $dbh->do("CREATE TABLE team(
             user_id INTEGER,
             period_id INTEGER,
-            adults INTEGER DEFAULT '0',
+            adults INTEGER DEFAULT 0,
             scouts INTEGER DEFAULT 0,
-            car INTEGER DEFAULT 0,
-            trailer INTEGER DEFAULT 0,
-            pull INTEGER DEFAULT 0,
+            car BOOLEAN DEFAULT 0,
+            trailer BOOLEAN DEFAULT 0,
+            pull BOOLEAN DEFAULT 0,
             PRIMARY KEY (user_id,period_id),
             FOREIGN KEY(user_id) REFERENCES user(user_id),
             FOREIGN KEY(period_id) REFERENCES period(period_id)
@@ -63,6 +63,7 @@ $dbh->do("CREATE TABLE team(
 
 $dbh->do("CREATE TABLE pickup(
             pickup_id INTEGER,
+            createdate TEXT DEFAULT (datetime('now','localtime')), 
             name TEXT,
             road TEXT,
             postalcode TEXT,
