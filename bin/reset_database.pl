@@ -65,6 +65,7 @@ $dbh->do("CREATE TABLE pickup(
             pickup_id INTEGER,
             createdate TEXT DEFAULT (datetime('now','localtime')), 
             name TEXT,
+            phonenumber TEXT,
             road TEXT,
             postalcode TEXT,
             city TEXT,
@@ -148,6 +149,7 @@ for (my $i = 1; $i <= $users; $i++) {
           );
 }
 
+my @phonenumbers = qw(12345678 87653672 12315234 27312387 21367329);
 my @roads = qw(gammelmosevej hanehøj jordbærvænget hjaltesvej sæbjørnsvej buddingehovedgade jernbanevej);
 my @postalcodes = qw(2880 2860 2900 9000);
 my @cities = qw(bagsværd lyngby søborg andeby hareskov);
@@ -161,13 +163,14 @@ for (my $i = 0; $i < 50; $i++) {
   $pickup_id = 1 if !defined $pickup_id;
 
   my $name = $firstnames[int(rand(scalar(@firstnames)))];
+  my $phonenumber = $phonenumbers[int(rand(scalar(@phonenumbers)))];
   my $road = $roads[int(rand(scalar(@roads)))];
   my $postalcode = $postalcodes[int(rand(scalar(@postalcodes)))];
   my $city = $cities[int(rand(scalar(@cities)))];
   my $item = $items[int(rand(scalar(@items)))];
-  $dbh->do("INSERT INTO pickup (pickup_id, name, road, postalcode, city, description)
-            VALUES (?, ?, ?, ?, ?, ?);",
-            undef,$pickup_id,$name,$road,$postalcode,$city,$item
+  $dbh->do("INSERT INTO pickup (pickup_id, name, phonenumber, road, postalcode, city, description)
+            VALUES (?, ?, ?, ?, ?, ?, ?);",
+            undef,$pickup_id,$name,$phonenumber,$road,$postalcode,$city,$item
           );
 
   foreach my $period_id (@period_ids) {
