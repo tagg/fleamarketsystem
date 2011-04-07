@@ -32,7 +32,7 @@ get '/afhentning' => sub {
 };
 
 post '/afhentning' => sub {
-  my $dbargs = {AutoCommit => 0,
+  my $dbargs = {AutoCommit => 1,
                 PrintError => 1};
 
   my $dbh = DBI->connect("dbi:SQLite:dbname=$FindBin::Bin/../data/$databasename","","",$dbargs);
@@ -82,13 +82,28 @@ post '/afhentning' => sub {
     }
 
   } else {
+
     $content->{message} = "Registreringen er modtaget.";
     #indsæt i databasen
 
+    my ($pickup_id) = $dbh->selectrow_array("SELECT max(pickup_id)+1
+                                           FROM pickup;");
+    $pickup_id = 1 if !defined $pickup_id;
 
+    $dbh->do("INSERT INTO pickup (pickup_id, name, phonenumber, road, postalcode, city, description)
+              VALUES (?, ?, ?, ?, ?, ?, ?);",
+              undef,$pickup_id,$name,$phonenumber,$road,$postalcode,$city,$items
+            );
 
-
-
+    foreach my $period (@{ $content->{periods} }) {
+      my ($period_id) = @{ $period };
+      if (defined params->{"period$period_id"}) {
+        $dbh->do("INSERT INTO pickup_period (pickup_id,period_id)
+                VALUES (?, ?)",
+                undef,$pickup_id,$period_id
+              );
+      }
+    }
   }
   
   template 'afhentning', $content;
