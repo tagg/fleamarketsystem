@@ -42,8 +42,12 @@ input.names {
 }
 
 div.data {
+  width: 492px;
+  padding:3px;
+  margin:0px;
+  margin-bottom:3px;
   background: #e5eecc;
-  margin:6px;
+  border:solid 1px #c3c3c3;
 }
 
 div.user {

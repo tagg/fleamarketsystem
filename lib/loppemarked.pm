@@ -20,7 +20,16 @@ get '/' => sub {
 };
 
 get '/afhentning' => sub {
-  template 'clean', { data => 'Hello get' };
+  my $dbargs = {AutoCommit => 0,
+                PrintError => 1};
+
+  my $dbh = DBI->connect("dbi:SQLite:dbname=$FindBin::Bin/../data/$databasename","","",$dbargs);
+
+  my $periods = $dbh->selectall_arrayref("SELECT period_id,name FROM period WHERE pickup = 1");
+
+  my $dumper = Dumper $periods;
+
+  template 'afhentning', { data => $dumper, periods => $periods };
 };
 
 post '/afhentning' => sub {

@@ -1,0 +1,40 @@
+[%# data %]
+<div class="message">
+  <p>
+    <span class="accepted">
+      [% message %]
+    </span>
+    <span class="error">
+      [% error %]
+    </span>
+  </p>
+</div>
+<h2><center>Registrering af afhentning til loppemarkedet</center></h2>
+<form name="pickup" action="/afhentning" method="post">
+<div class="data">
+  <table border=0>
+    <tr><td>Navn:</td><td><input type="text" name="name" value="[% name %]"/>*</td><td><span class="error">[% nameerror %]</span></td></tr>
+    <tr><td>Telefonnummer:</td><td><input type="text" name="phonenumber" value="[% phonenumber %]"/>*</td><td><span class="error">[% phonenumbererror %]</span></td></tr>
+    <tr><td>Vej:</td><td><input type="text" name="road" value="[% road %]"/>*</td><td><span class="error">[% roaderror %]</span></td></tr>
+    <tr><td>Postnummer:</td><td><input type="text" name="postalcode" value="[% postalcode %]"/>*</td><td><span class="error">[% postalcodeerror %]</span></td></tr>
+    <tr><td>By:</td><td><input type="text" name="city" value="[% city %]"/>*</td><td><span class="error">[% cityerror %]</span></td></tr>
+  </table>
+</div>
+<div class="data">
+  <h3>Følgende kan afhentes:</h3>
+  <textarea name="item" rows="10" cols="40">[% item %]</textarea><span class="error">[% itemerror %]</span>
+  <h3>Hvilke tidspunkter kan vi afhente tingene?</h3>
+  <table border="0">
+    [% FOREACH period IN periods %]
+      <tr>
+        <td colspan="6">
+          <input type="checkbox" name="period[% period.0 %]">[% period.1 %]
+        </td>
+      </tr>
+    [% END %]
+  </table>
+</div>
+<div>
+  <input type="submit" value="Send" />
+</div>
+</form>
