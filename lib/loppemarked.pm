@@ -109,6 +109,15 @@ post '/afhentning' => sub {
   template 'afhentning', $content;
 };
 
+get '/afhentningdata' => sub {
+  my $dbargs = {AutoCommit => 0,
+                PrintError => 1};
+
+  my $dbh = DBI->connect("dbi:SQLite:dbname=$FindBin::Bin/../data/$databasename","","",$dbargs);
+  my $content;
+
+  template 'afhentningdata', $content;  
+};
 
 get '/hjaelper' => sub {
   my $dbargs = {AutoCommit => 0,
@@ -162,6 +171,12 @@ post '/hjaelper' => sub {
       if ((params->{$period_id.'adults'} eq '' || params->{$period_id.'adults'} eq '0') && 
           (params->{$period_id.'scouts'} eq '' || params->{$period_id.'scouts'} eq '0')) {
         push @{$period}, 'Hvis ingen deltager, så fjern fluebenet.';
+        $error = 1;
+      } elsif (!(params->{$period_id.'adults'} =~ /^(\d+\.?\d*|\.\d+)$/) && !(params->{$period_id.'adults'} eq '')) {
+        push @{$period}, 'Brug kun tal, tak.';
+        $error = 1;
+      } elsif (!(params->{$period_id.'scouts'} =~ /^(\d+\.?\d*|\.\d+)$/) && !(params->{$period_id.'scouts'} eq '')) {
+        push @{$period}, 'Brug kun tal, tak.';
         $error = 1;
       } else {
         push @{$period}, '';
@@ -229,7 +244,7 @@ post '/hjaelper' => sub {
   template 'hjaelper', $content;
 };
 
-get '/data' => sub {
+get '/hjaelperdata' => sub {
   my $dbh = DBI->connect("dbi:SQLite:dbname=$FindBin::Bin/../data/$databasename","","");
   my $data;
   my $cake;
@@ -281,7 +296,7 @@ get '/data' => sub {
   }
 
   #template 'data', {data => Dumper($data), cake => $cake};
-  template 'data', {data => $data, cake => $cake};
+  template 'hjaelperdata', {data => $data, cake => $cake};
 };
 
 any qr{.*} => sub {

@@ -1,0 +1,64 @@
+[%# data %]
+
+[% FOREACH period IN data %]
+  <div class="data">
+    <table border="0">
+      <tr>
+        <td colspan="6">
+          <h4>[% period.name %]</h4>
+        </td>
+      </tr>
+      <tr>
+        <td width="130">Navn</td>
+        <td width="70">Voksne</td>
+        <td width="70">Spejdere</td>
+        <td width="70">Bil</td>
+        <td width="70">Trailer</td>
+        <td width="70">Tr&aelig;k</td>
+      </tr>
+      [% FOREACH assign IN period.data %]
+        <tr>
+          <td>[% assign.name %]</td>
+          <td>[% assign.adults %]</td>
+          <td>[% assign.scouts %]</td>
+          <td>[% IF assign.car %]X[% END %]</td>
+          <td>[% IF assign.trailer %]X[% END %]</td>
+          <td>[% IF assign.pull %]X[% END %]</td>
+        </tr>
+      [% END %]
+      <tr>
+        <td>Ialt:</td>
+        <td>[% period.result.adults %]</td>
+        <td>[% period.result.scouts %]</td>
+        <td>[% period.result.car %]</td>
+        <td>[% period.result.trailer %]</td>
+        <td>[% period.result.pull %]</td>
+      </tr>
+    </table>
+  </div>
+[% END %]
+
+
+<div class="data">
+  <table>
+    <tr>
+      <td>
+        <h4>F&oslash;lgende personer kommer med kage:</h4>
+      </td>
+    </tr>
+  [% FOREACH name IN cake.names %]
+    <tr>
+      <td>
+        [% name %]
+      </td>
+    </tr>
+  [% END %]
+    <tr>
+      <td>
+        Kager ialt: [% cake.amount %]
+      </td>
+    </tr>
+  </table>
+</div>
+
+
