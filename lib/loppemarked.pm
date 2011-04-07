@@ -107,12 +107,12 @@ post '/hjaelper' => sub {
   } else {
     $content->{message} = "Tilmeldingen er modtaget.";
 
-    
-    my ($user_id) = $dbh->selectrow_array("SELECT max(user_id)+1
-                                           FROM user;");
-    $user_id = 0 if !defined $user_id;
 
 #   INSERTING DATA IF GOOD
+    my ($user_id) = $dbh->selectrow_array("SELECT max(user_id)+1
+                                           FROM user;");
+    $user_id = 1 if !defined $user_id;
+
     $dbh->do("INSERT INTO user (user_id,firstname,lastname,branch_id) 
               VALUES (?, ?, ?, ?)",
               undef,$user_id,params->{firstname},params->{lastname},params->{branch_id});
