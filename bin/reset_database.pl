@@ -92,12 +92,12 @@ foreach my $branch (@branches) {
   $dbh->do("INSERT INTO branch (name) VALUES ('$branch')");
 }
 
-my @periods = ('Indsamling 30. april 14.00 til 17.30',
-               'Indsamling 1. maj 10.00 til 14.00',
-               'Indsamling 1. maj 14.00 til 18.00',
-               'Morgenholdet Loppemarkedsdagen 14. maj 6.30 til 10.00',
-               'Salgsholdet Loppemarkedsdagen 14. maj 10.00 til 15.00',
-               'Oprydningsholdet Loppemarkedsdagen 14. maj 15.00 til 18.00'
+my @periods = ('Indsamling 14. april 10.00 til 12.00',
+               'Indsamling 14. april 13.00 til 16.00',
+               'Indsamling 15. april 10.00 til 14.00',
+               'Morgenholdet Loppemarkedsdagen 21. april 6.30 til 10.00',
+               'Salgsholdet Loppemarkedsdagen 21. april 10.00 til 15.00',
+               'Oprydningsholdet Loppemarkedsdagen 21. april 15.00 til 18.00'
               );
 
 foreach my $periodnumber (0..(scalar(@periods)-1)) {
