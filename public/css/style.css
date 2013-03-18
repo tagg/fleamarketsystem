@@ -11,8 +11,26 @@ div.frame {
   margin-right: auto;
   height: auto;
   width: 500px;
-  padding-bottom: 25px;
+  padding-bottom: 100px;
   padding-top: 5px;
+}
+
+div.footer {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  margin-top: -60px;
+  height: 60px;
+  clear: both;
+}
+
+div.foot {
+  width: 600px;
+  height: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
 }
 
 div.message {

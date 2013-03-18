@@ -13,5 +13,15 @@
     <div class="frame">
       [% content %]
     </div>
+    <div class="footer">
+      <div class="foot">
+        <a href="http://www.perl.org"><img class="perl" src="http://twiki.org/pub/perl-logo-88x31.gif"></a>
+        <span class="footer">
+          Af Asbj&oslash;rn Thegler for Loppemarkedsudvalget, Bagsv&aelig;rd Gruppe, DDS<br>
+          <a href="mailto:asbjoern@dds-bagsvaerd.dk">asbjoern@dds-bagsvaerd.dk</a><br>
+          Project on <a href="https://github.com/ath88/Loppemarkedsadministration">github.com</a></br>
+        </span>
+      </div>
+    </div>
   </body>
 </html>
