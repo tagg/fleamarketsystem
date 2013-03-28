@@ -10,6 +10,7 @@ use FindBin;
 use Data::Dump;
 use Data::Dumper;
 use String::CamelCase;
+use Encode;
 
 our $VERSION = '0.1';
 
@@ -267,7 +268,7 @@ get '/hjaelperdata' => sub {
                                                    undef, $period_id)};
     foreach my $result (@result_array) {
       my @array = @{$result};
-      push @{$period_data{data}}, {name    => $array[0], 
+      push @{$period_data{data}}, {name    => decode('UTF-8', $array[0]), 
                                    adults  => $array[1], 
                                    scouts  => $array[2], 
                                    car     => $array[3], 
