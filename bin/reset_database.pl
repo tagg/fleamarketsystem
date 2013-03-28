@@ -114,8 +114,8 @@ say "Inserted into static datatables.";
 # INSERTING TESTDATA IF $TESTDATA
 exit(0) unless $testdata;
 
-my @firstnames = qw( Tom Per Hans Nina Lone Kim Ole Jens Line Frede );
-my @lastnames = qw( Hansen Jensen Persson Larsen Nielsen Ingersen Petersen );
+my @firstnames = qw( Tom Per Hans Nina Lone Kim Ole Jens Line Frede Asbjørn);
+my @lastnames = qw( Hansen Jensen Persson Larsen Nielsen Ingersen Petersen Aagård);
 my $users = scalar(@firstnames);
 
 foreach my $firstname (@firstnames) {

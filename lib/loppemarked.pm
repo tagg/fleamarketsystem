@@ -292,7 +292,7 @@ get '/hjaelperdata' => sub {
                                                   ON user.user_id=cake.user_id"
                                               )};
   foreach my $person (@brings_cake) {
-    push @{$cake->{names}},$person;
+    push @{$cake->{names}},decode('UTF8', $person);
     $cake->{amount}++;
   }
 
