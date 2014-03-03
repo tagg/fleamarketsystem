@@ -1,0 +1,87 @@
+% layout 'default';
+
+<div class="message">
+  <p>
+    <span class="accepted">
+      <%= $status->{success} %>
+    </span>
+    <span class="error">
+      <%= $status->{error} %>
+    </span>
+  </p>
+</div>
+<h2><center>Tilmelding som hj&aelig;lper til loppemarkedet</center></h2>
+<form name="input" action="/hjaelper" method="post">
+  <div class="user">
+    <table>
+      <tr>
+        <td width="78">Fornavn:</td>
+        <td><input class="names" type="text" name="firstname" value="<%= $userdata->{firstname} %>"/>*</td>
+        <td><span class="error"><%= $errordata->{firstname} %></span></td>
+      </tr>
+      <tr>
+        <td>Efternavn:</td>
+        <td><input class="names" type="text" name="lastname" value="<%= $userdata->{lastname} %>"/>*</td>
+        <td><span class="error"><%= $errordata->{lastname} %></span></td>
+      </tr>
+      <tr>
+        <td>Gren:</td>
+        <td><select name="branch_id">
+          <% foreach my $branch (@{$staticdata->{branches}}) { %>
+            <option value="<%= $branch->{id} %>" 
+            <% if ($userdata->{branch_id} && $branch->{id} == $userdata->{branch_id}) { %> 
+              selected 
+            <% } %>><%= $branch->{'name'} %></option>
+          <% } %>
+        </select></td>
+      </tr>
+      <tr>
+        <td>
+          <input type="checkbox" name="cake" <% if ($userdata->{cake}) { %> checked <% } %>></td><td>Medbringer kage til kaffeboden på loppemarkedsdagen
+        </td>
+      </tr>
+    </table>
+  </div>
+  <h3>Jeg/vi deltager i:</h3>
+  <% foreach my $period (@{$staticdata->{periods}}) { %>
+    % my $id =     $period->{id};
+    % my $name =   $period->{name};
+    % my $cars =   $period->{cars};
+    % my $pickup = $period->{pickup};
+    % my $userperiod = $userdata->{periods}[$id];
+    % my $errorperiod = $errordata->{periods}[$id];
+    <div class="team_header">
+      <table><tr>
+        <td>
+          <input name="check<%= $id %>" type="checkbox" onclick='$("#team<%= $id %>").slideToggle("slow");' <% if ( $userperiod ) { %> checked <% } %> >
+        </td>
+        <td><%= $name %></td>
+      </tr></table>
+    </div>
+  <div class="team" id="team<%= $id %>">
+    <span class="error"><%= $errorperiod %></span>
+    <table>
+      <tr><td>Antal voksne:</td><td><input type="text" name="<%= $id %>adults" value="<%= $userperiod->{adults} || 0 %>"/></td></tr>
+      <tr><td>Antal spejdere:</td><td><input type="text" name="<%= $id %>scouts" value="<%= $userperiod->{scouts} || 0 %>"/></td></tr>
+    </table>
+    <% if ($cars) { %>
+    <table class="checkboxes">
+      <tr><td><input type="checkbox" name="<%= $id %>car" <% if ($userperiod->{car}) { %> checked <% } %>/>Har bil</td></tr>
+      <tr><td><input type="checkbox" name="<%= $id %>trailer" <% if ($userperiod->{trailer}) { %> checked <% } %>/>Har trailer</td></tr>
+      <tr><td><input type="checkbox" name="<%= $id %>pull" <% if ($userperiod->{pull}) { %> checked <% } %>/>Har tr&aelig;k</td></tr>
+    </table>
+    <% } %>
+  </div>
+  <% } %>
+  <div>
+    <input type="submit" value="Send" />
+  </div>
+</form>
+<script type="text/javascript">
+  <% foreach my $period (@{$staticdata->{periods}}) { %>
+    % my $id = $period->{id};
+    if (document.input.check<%= $id %>.checked == true) {
+      $("#team<%= $id %>").show();
+    }
+  <% } %>
+</script>

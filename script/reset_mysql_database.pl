@@ -100,20 +100,17 @@ foreach my $branch (@branches) {
   $dbh->do("INSERT INTO branch (name) VALUES ('$branch')");
 }
 
-my @periods = ('Indsamling 6. april 13.00 til 17.30',
-               'Indsamling 7. april 10.00 til 16.00',
-               'Morgenholdet Loppemarkedsdagen 13. april 7.00 til 10.00',
-               'Salgsholdet Loppemarkedsdagen 13. april 10.00 til 15.00',
-               'Oprydningsholdet Loppemarkedsdagen 13. april 15.00 til 18.00'
+my @periods = ({pickup => 1, cars => 1, name => 'Indsamling 6. april 13.00 til 17.30'},
+	       {pickup => 1, cars => 1, name => 'Indsamling 7. april 10.00 til 16.00'},
+               {pickup => 0, cars => 0, name => 'Morgenholdet Loppemarkedsdagen 13. april 7.00 til 10.00'},
+               {pickup => 0, cars => 0, name => 'Salgsholdet Loppemarkedsdagen 13. april 10.00 til 15.00'},
+               {pickup => 0, cars => 1, name => 'Oprydningsholdet Loppemarkedsdagen 13. april 15.00 til 18.00'},
               );
 
-foreach my $periodnumber (0..(scalar(@periods)-1)) {
-  my ($cars,$pickup) = (1,1);
-  $cars = 0 if ($periodnumber == 2 || $periodnumber == 3);
-  $pickup = 0 if ($periodnumber > 1);
+foreach my $period (@periods) {
   $dbh->do("INSERT INTO period (name,cars,pickup) 
             VALUES (?, ?, ?)", 
-            undef, $periods[$periodnumber], $cars, $pickup
+            undef, $period->{name}, $period->{cars}, $period->{pickup},
           );
 }
 

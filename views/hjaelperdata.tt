@@ -1,5 +1,3 @@
-[%# data %]
-
 [% FOREACH period IN data %]
   <div class="data">
     <table border="0">

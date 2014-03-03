@@ -1,0 +1,40 @@
+% layout 'default';
+
+<% foreach my $period (@{$helperdata})  {%>
+  <div class="data">
+    <table border="0">
+      <tr>
+        <td colspan="6">
+          <h4><%= $period->{period}{name} %></h4>
+        </td>
+      </tr>
+      <tr>
+        <td width="130">Navn</td>
+        <td width="70">Voksne</td>
+        <td width="70">Spejdere</td>
+        <td width="70">Bil</td>
+        <td width="70">Trailer</td>
+        <td width="70">Tr&aelig;k</td>
+      </tr>
+      <% foreach my $team (@{$period->{data}}) { %>
+        <tr>
+          <td><%= $team->{name} %></td>
+          <td><%= $team->{adults} %></td>
+          <td><%= $team->{scouts} %></td>
+          <td><% if ($team->{car}) { %>X<% } %></td>
+          <td><% if ($team->{trailer}) { %>X<% } %></td>
+          <td><% if ($team->{pull}) { %>X<% } %></td>
+        </tr>
+      <% } %>
+      <tr>
+        <td>Ialt:</td>
+        <td><%= $period->{totals}{adults} %></td>
+        <td><%= $period->{totals}{scouts} %></td>
+        <td><%= $period->{totals}{car} %></td>
+        <td><%= $period->{totals}{trailer} %></td>
+        <td><%= $period->{totals}{pull} %></td>
+      </tr>
+    </table>
+  </div>
+<% } %>
+

@@ -15,12 +15,24 @@ div.frame {
   padding-top: 5px;
 }
 
+div.debug {
+  margin-top: -100px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 50px;
+  width: 60%;
+  padding-bottom: 40px;
+  padding-top: 5px;
+  background-color: lightgreen;
+  border:solid 1px #c3c3c3;
+}
+
 div.footer {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
   position: relative;
-  margin-top: -60px;
+  margin-top: -0px;
   height: 60px;
   clear: both;
 }
