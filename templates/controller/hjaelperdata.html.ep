@@ -38,3 +38,24 @@
   </div>
 <% } %>
 
+<div class="data">
+  <table>
+    <tr>
+      <td>
+        <h4>F&oslash;lgende personer kommer med kage:</h4>
+      </td>
+    </tr>
+  <% foreach my $cake (@{$cakedata->{cake}}) { %>
+    <tr>
+      <td>
+        <%= $cake->{name} %>
+      </td>
+    </tr>
+  <% } %>
+    <tr>
+      <td>
+        Kager ialt: <%= $cakedata->{cakeamount} %>
+      </td>
+    </tr>
+  </table>
+</div>

@@ -5,7 +5,7 @@ use warnings;
 use utf8;
 
 use base 'Exporter';
-our @EXPORT = qw(getBranches getPeriods addHelper getHelpers);
+our @EXPORT = qw(getBranches getPeriods addHelper getHelpers getCakes);
 
 use DBI;
 use Data::Dumper;
@@ -49,6 +49,19 @@ sub getHelpers {
     }
 
     return $helperdata;
+}
+
+sub getCakes {
+    my $result->{cake} = $dbh->selectall_arrayref("
+        SELECT CONCAT(firstname, ' ', lastname) as name 
+        FROM user 
+            JOIN cake 
+                ON user.user_id = cake.user_id 
+    ", { Slice => {} });
+
+    $result->{cakeamount} = scalar @{$result->{cake}};
+
+    return $result;
 }
 
 sub addHelper {

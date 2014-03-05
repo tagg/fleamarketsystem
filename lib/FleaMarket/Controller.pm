@@ -13,8 +13,9 @@ sub hjaelperdata {
     my $self = shift;
     
     my $helperdata = getHelpers();
+    my $cake = getCakes();
 
-    $self->render(helperdata => $helperdata, debug => '');
+    $self->render(helperdata => $helperdata, debug => '', cakedata => $cake);
 }
 
 sub hjaelper {
