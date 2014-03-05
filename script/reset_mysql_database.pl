@@ -100,11 +100,13 @@ foreach my $branch (@branches) {
   $dbh->do("INSERT INTO branch (name) VALUES ('$branch')");
 }
 
-my @periods = ({pickup => 1, cars => 1, name => 'Indsamling 6. april 13.00 til 17.30'},
-	       {pickup => 1, cars => 1, name => 'Indsamling 7. april 10.00 til 16.00'},
-               {pickup => 0, cars => 0, name => 'Morgenholdet Loppemarkedsdagen 13. april 7.00 til 10.00'},
-               {pickup => 0, cars => 0, name => 'Salgsholdet Loppemarkedsdagen 13. april 10.00 til 15.00'},
-               {pickup => 0, cars => 1, name => 'Oprydningsholdet Loppemarkedsdagen 13. april 15.00 til 18.00'},
+my @periods = ({pickup => 1, cars => 1, name => 'Indsamling 26. april 13.00 til 15.00'},
+	       {pickup => 1, cars => 1, name => 'Indsamling 26. april 15.00 til 17.30'},
+	       {pickup => 1, cars => 1, name => 'Indsamling 27. april 10.00 til 13.00'},
+	       {pickup => 1, cars => 1, name => 'Indsamling 27. april 13.00 til 16.00'},
+               {pickup => 0, cars => 0, name => 'Morgenholdet Loppemarkedsdagen 10. maj 7.00 til 10.00'},
+               {pickup => 0, cars => 0, name => 'Salgsholdet Loppemarkedsdagen 10. maj 10.00 til 15.00'},
+               {pickup => 0, cars => 1, name => 'Oprydningsholdet Loppemarkedsdagen 10. maj 15.00 til 18.00'},
               );
 
 foreach my $period (@periods) {
