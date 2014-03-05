@@ -4,9 +4,11 @@ use Mojo::Base 'Mojolicious::Controller';
 use FleaMarket::Model;
 use Data::Dumper;
 
+my $mode = "SANDBOX MODE";
+
 sub index {
     my $self = shift;
-    $self->render(debug => '');
+    $self->render(debug => '', mode => $mode);
 }
 
 sub hjaelperdata {
@@ -14,7 +16,7 @@ sub hjaelperdata {
     
     my $helperdata = getHelpers();
 
-    $self->render(helperdata => $helperdata, debug => '');
+    $self->render(helperdata => $helperdata, debug => '', mode => $mode);
 }
 
 sub hjaelper {
@@ -23,7 +25,7 @@ sub hjaelper {
     my $staticdata->{branches} = getBranches();
     $staticdata->{periods} = getPeriods();
 
-    $self->stash(userdata => {}, staticdata => $staticdata, errordata => {}, status => {}, debug => '');
+    $self->stash(userdata => {}, staticdata => $staticdata, errordata => {}, status => {}, debug => '', mode => $mode);
 
     $self->render();
 }
@@ -46,7 +48,7 @@ sub hjaelperpost {
 
     my $staticdata->{branches} = getBranches();
     $staticdata->{periods} = getPeriods();
-    $self->stash(userdata => $userdata, staticdata => $staticdata, errordata => $errordata, status => $status, debug => '');
+    $self->stash(userdata => $userdata, staticdata => $staticdata, errordata => $errordata, status => $status, debug => '', mode => $mode);
     $self->render(template => 'controller/hjaelper');
 }
 

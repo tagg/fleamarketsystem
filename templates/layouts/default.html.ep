@@ -19,6 +19,7 @@
     </div>
     % }
     <div class="footer">
+      <center><h3 class="focus"><%= $mode %></h3></center>
       <div class="foot">
         <a href="http://www.perl.org"><img class="perl" src="http://twiki.org/pub/perl-logo-88x31.gif"></a>
         <span class="footer">
