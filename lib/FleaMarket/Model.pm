@@ -5,7 +5,7 @@ use warnings;
 use utf8;
 
 use base 'Exporter';
-our @EXPORT = qw(getBranches getPeriods addHelper getHelpers getCakes);
+our @EXPORT = qw(getBranches getPeriods addHelper addPickup getHelpers getCakes);
 
 use DBI;
 use Data::Dumper;
@@ -64,6 +64,34 @@ sub getCakes {
     return $result;
 }
 
+sub addPickup {
+    my $userdata = shift;
+
+## sync
+
+    my $pickup_id = _getNextPickupId();
+
+    $dbh->do("
+        INSERT INTO pickup (pickup_id, name, phonenumber, email, road, postalcode, city, description) 
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ;", undef, $pickup_id, $userdata->{name}, $userdata->{phonenumber}, $userdata->{email}, $userdata->{road},
+    $userdata->{postalcode}, $userdata->{city}, $userdata->{items})
+        or return {error => $dbh->errstr};
+
+## sync
+
+    foreach my $period (@{$userdata->{periods}}) {
+        next unless defined $period;
+        $dbh->do("
+            INSERT INTO pickup_period (pickup_id, period_id) 
+	    VALUES (?, ?)
+        ;", undef, $pickup_id, $period->{id})
+            or return {error => $dbh->errstr};
+    }
+
+    return undef;
+}
+      
 sub addHelper {
     my $userdata = shift;
 
@@ -125,6 +153,16 @@ sub _getNextUserId {
 
     $user_id = 1 if !defined $user_id;
     return $user_id;
+}
+
+sub _getNextPickupId {
+    my ($pickup_id) = $dbh->selectrow_array("
+        SELECT max(pickup_id)+1 
+        FROM pickup
+    ;"); 
+
+    $pickup_id = 1 if !defined $pickup_id;
+    return $pickup_id;
 }
 
 sub _connect {

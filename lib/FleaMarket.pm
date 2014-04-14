@@ -17,6 +17,10 @@ sub startup {
   $r->post('/hjaelper')->to('controller#hjaelperpost');
 
   $r->get('/hjaelperdata')->to('controller#hjaelperdata');
+
+
+  $r->get('/afhentning')->to('controller#afhentning');
+  $r->post('/afhentning')->to('controller#afhentningpost');
 }
 
 1;

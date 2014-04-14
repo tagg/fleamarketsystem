@@ -73,6 +73,7 @@ $dbh->do("CREATE TABLE pickup(
             createdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
             name TEXT,
             phonenumber TEXT,
+            email TEXT,
             road TEXT,
             postalcode TEXT,
             city TEXT,

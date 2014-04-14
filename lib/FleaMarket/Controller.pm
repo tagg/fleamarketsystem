@@ -11,6 +11,36 @@ sub index {
     $self->render(debug => '', mode => $mode);
 }
 
+sub afhentning {
+    my $self = shift;
+
+    my $staticdata->{periods} = getPeriods();
+
+    $self->stash(userdata => {}, staticdata => $staticdata, errordata => {}, status => {}, debug => '', mode => $mode);
+
+    $self->render();
+}
+
+sub afhentningpost {
+    my $self = shift;
+    my $status;
+
+    my $userdata = getpickupdata($self->req);
+    my $errordata = validatepickupdata($userdata);
+    $errordata = submitpickupdata($userdata) unless $errordata;
+
+    if ($errordata) {
+	$status->{error} = $errordata->{error} || 'Der skete en fejl under registreringen';
+    } else {
+        $status->{success} = 'Din registrering er modtaget. Mange tak! :)';
+	$userdata = {};
+    }
+
+    my $staticdata->{periods} = getPeriods();
+    $self->stash(userdata => $userdata, staticdata => $staticdata, errordata => $errordata, status => $status, debug => '', mode => $mode);
+    $self->render(template => 'controller/afhentning');
+}
+
 sub hjaelperdata {
     my $self = shift;
     
@@ -55,6 +85,10 @@ sub hjaelperpost {
 
 sub submithelperdata {
     return addHelper(shift);
+}
+
+sub submitpickupdata {
+    return addPickup(shift);
 }
 
 sub validatehelperdata {
@@ -111,6 +145,54 @@ sub gethelperdata {
     return $userdata;
 }
 
+sub getpickupdata {
+    my $request = shift;
+
+    my $hash = _postToHashref($request);
+
+    my $userdata = {};
+    $userdata->{name} = $hash->{name} || '';
+    $userdata->{phonenumber} = $hash->{phonenumber} || '';
+    $userdata->{email} = $hash->{email} || '';
+    $userdata->{road} = $hash->{road} || '';
+    $userdata->{postalcode} = $hash->{postalcode} || '';
+    $userdata->{city} = $hash->{city} || '';
+    $userdata->{items} = $hash->{items} || '';
+
+    foreach my $period (@{getPeriods()}) {
+        my $id = $period->{id};
+        if ($hash->{'period' . $id}) {
+            $userdata->{periods}[$id]{id} = $id;
+        }
+    }
+    
+    return $userdata;
+}
+
+sub validatepickupdata {
+    my $userdata = shift;
+    my $errordata;
+
+    #validate data
+
+    $errordata->{name} = "Skriv venligst dit navn." if ($userdata->{name} eq '');
+    $errordata->{phonenumber} = "Skriv venligst dit nummer, så vi kan kontakte dig med spørgsmål." if ($userdata->{phonenumber} eq '');
+    $errordata->{road} = "Skriv venligst din vej og nummer." if ($userdata->{road} eq '');
+    $errordata->{city} = "Skriv venligst dit bynavn." if ($userdata->{city} eq '');
+    $errordata->{postalcode} = "Skriv venligst dit postnummer." if ($userdata->{postalcode} eq '');
+    $errordata->{items} = "Beskriv venligst hvad vi kan hente hos dig." if ($userdata->{items} eq '');
+
+    my $periods = 0;
+
+    foreach my $period (@{$userdata->{periods}}) {
+	next unless defined $period;
+	$periods++;
+    }
+    
+    $errordata->{error} = 'Vi vil gerne vide i hvilken periode vi kan afhente tingene.' unless $periods;
+
+    return $errordata;
+}
 
 sub _postToHashref {
     my $request = shift;
