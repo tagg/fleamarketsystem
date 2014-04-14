@@ -1,0 +1,64 @@
+% layout 'default';
+
+<div class="message">
+  <p>
+    <span class="accepted">
+      <%= $status->{success} %>
+    </span>
+    <span class="error">
+      <%= $status->{error} %>
+    </span>
+  </p>
+</div>
+<h2><center>Registrering af afhentning til loppemarkedet</center></h2>
+<form name="pickup" action="/afhentning" method="post">
+<div class="data">
+  <table>
+    <tr><td>Navn:</td><td><input type="text" name="name" value="<%= $userdata->{name} %>"/></td>
+    <td><span class="error"><%= $errordata->{name} %></span></td></tr>
+    <tr><td>Telefonnummer:</td><td><input type="text" name="phonenumber" value="<%= $userdata->{phonenumber} %>"/></td>
+    <td><span class="error"><%= $errordata->{phonenumber} %></span></td></tr>
+    <tr><td>Email:</td><td><input type="text" name="email" value="<%= $userdata->{email} %>"/></td>
+    <td><span class="error"><%= $errordata->{email} %></span></td></tr>
+    <tr><td>Vej og nummer:</td><td><input type="text" name="road" value="<%= $userdata->{road} %>"/></td>
+    <td><span class="error"><%= $errordata->{road} %></span></td></tr>
+    <tr><td>Postnummer:</td><td><input type="text" name="postalcode" value="<%= $userdata->{postalcode} %>"/></td>
+    <td><span class="error"><%= $errordata->{postalcode} %></span></td></tr>
+    <tr><td>By:</td><td><input type="text" name="city" value="<%= $userdata->{city} %>"/></td>
+    <td><span class="error"><%= $errordata->{city} %></span></td></tr>
+  </table>
+</div>
+<div class="data">
+  <h3>Følgende kan afhentes:</h3>
+  <table>
+    <tr>
+      <td>
+        <textarea name="items" rows="10" cols="40"><%= $userdata->{items} %></textarea>
+      </td>
+      <td>
+        <span class="error"><%= $errordata->{item} %></span>
+      </td>
+    </tr>
+  </table>      
+  <h3>Hvilke tidspunkter kan vi afhente tingene?</h3>
+  <table>
+    <tr><td>
+    <table width="300">
+      <% foreach my $period (@{$staticdata->{periods}}) { %>
+      % next unless $period->{pickup};
+      % my $id =     $period->{id};
+      % my $name =     $period->{name};
+      % my $userperiod = $userdata->{periods}[$id];
+        <tr>
+          <td colspan="6">
+            <input type="checkbox" name="period<%= $id %>" <% if ( $userperiod ) { %> checked <% } %> > <%= $name %>
+          </td>
+        </tr>
+      <% } %>
+    </table></td><td><span class="error"><%= $errordata->{period} %></span></td></tr>
+  </table>
+</div>
+<div>
+  <input type="submit" value="Send" />
+</div>
+</form>
