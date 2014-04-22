@@ -16,28 +16,28 @@ sub afhentning {
 
     my $staticdata->{periods} = getPeriods();
 
-    $self->stash(userdata => {}, staticdata => $staticdata, errordata => {}, status => {}, debug => '', mode => $mode);
+    $self->stash(userdata => {}, staticdata => $staticdata, errordata => {}, result => {}, debug => '', mode => $mode);
 
     $self->render();
 }
 
 sub afhentningpost {
     my $self = shift;
-    my $status;
+    my $result;
 
     my $userdata = getpickupdata($self->req);
     my $errordata = validatepickupdata($userdata);
     $errordata = submitpickupdata($userdata) unless $errordata;
 
     if ($errordata) {
-	$status->{error} = $errordata->{error} || 'Der skete en fejl under registreringen';
+	$result->{error} = $errordata->{error} || 'Der skete en fejl under registreringen';
     } else {
-        $status->{success} = 'Din registrering er modtaget. Mange tak! :)';
+        $result->{success} = 'Din registrering er modtaget. Mange tak! :)';
 	$userdata = {};
     }
 
     my $staticdata->{periods} = getPeriods();
-    $self->stash(userdata => $userdata, staticdata => $staticdata, errordata => $errordata, status => $status, debug => '', mode => $mode);
+    $self->stash(userdata => $userdata, staticdata => $staticdata, errordata => $errordata, result => $result, debug => '', mode => $mode);
     $self->render(template => 'controller/afhentning');
 }
 
@@ -56,14 +56,14 @@ sub hjaelper {
     my $staticdata->{branches} = getBranches();
     $staticdata->{periods} = getPeriods();
 
-    $self->stash(userdata => {}, staticdata => $staticdata, errordata => {}, status => {}, debug => '', mode => $mode);
+    $self->stash(userdata => {}, staticdata => $staticdata, errordata => {}, result => {}, debug => '', mode => $mode);
 
     $self->render();
 }
 
 sub hjaelperpost {
     my $self = shift;
-    my $status;
+    my $result;
 
     my $userdata = gethelperdata($self->req);
     my $errordata = validatehelperdata($userdata);
@@ -71,15 +71,15 @@ sub hjaelperpost {
     $errordata = submithelperdata($userdata) unless $errordata;
 
     if ($errordata) {
-	$status->{error} = $errordata->{error} || 'Der skete en fejl under tilmeldingen';
+	$result->{error} = $errordata->{error} || 'Der skete en fejl under tilmeldingen';
     } else {
-        $status->{success} = 'Din tilmelding er modtaget. Vi ses! :)';
+        $result->{success} = 'Din tilmelding er modtaget. Vi ses! :)';
 	$userdata = {};
     }
 
     my $staticdata->{branches} = getBranches();
     $staticdata->{periods} = getPeriods();
-    $self->stash(userdata => $userdata, staticdata => $staticdata, errordata => $errordata, status => $status, debug => '', mode => $mode);
+    $self->stash(userdata => $userdata, staticdata => $staticdata, errordata => $errordata, result => $result, debug => '', mode => $mode);
     $self->render(template => 'controller/hjaelper');
 }
 

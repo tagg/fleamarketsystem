@@ -3,10 +3,10 @@
 <div class="message">
   <p>
     <span class="accepted">
-      <%= $status->{success} %>
+      <%= $result->{success} %>
     </span>
     <span class="error">
-      <%= $status->{error} %>
+      <%= $result->{error} %>
     </span>
   </p>
 </div>
